@@ -1,0 +1,61 @@
+{% extends 'monitoring/base.html' %}
+{% load material_form %}
+
+{% block content %}
+        <table width="100%" class="striped centered">
+        <colgroup>
+            <col width="10%">
+            <col width="20%">
+            <col width="20%">
+            <col width="35%">
+            <col width="15%">
+        </colgroup>
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Part</th>
+                <th>Serial</th>
+                <th>Comment</th>
+                <th>Last Update</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for part in parts %}
+
+                <tr>
+                    <td>{% if part.broken %}
+                        <i class="material-icons red-text" style="font-size: 0.8em">build</i>
+                    {% endif %}
+                        {{ part.type }}
+                    </td>
+                    <td>{{ part.part }}</td>
+                    <td>{{ part.serial }}</td>
+                    <td>{{ part.comment }}</td>
+                    <td>{{ part.last_update }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    <br><br><br><br><br>
+    <!-- Modal Trigger -->
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large red modal-trigger" href="#modal1">
+            <i class="large material-icons">add</i>
+        </a>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <form method="POST" class="post-form">
+            <div class="modal-content">
+                <h4>New part</h4>
+                {% csrf_token %}
+                {% form form=form %}{% endform %}
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="modal-action waves-effect waves-green btn">Accept</button>
+                <button type="reset" class="modal-action modal-close waves-effect waves-green btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
