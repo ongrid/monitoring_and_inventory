@@ -115,4 +115,3 @@ pip-selfcheck.json
 /inventory/migrations/
 db.sqlite3
 /monitoring/migrations/
-!/monitoring/migrations/
