@@ -32,7 +32,7 @@ class Worker(models.Model):
     address_pool = models.ForeignKey(UserPools, null=True, default=None)
     name = models.CharField(max_length=255)
     last_submit_time = models.DateTimeField(null=True)
-    reported_hash_rate = models.DecimalField(decimal_places=1, max_digits=5, default = 0)
+    reported_hash_rate = models.DecimalField(decimal_places=1, max_digits=5, default=0)
     valid_shares = models.IntegerField(null=True)
     invalid_shares = models.IntegerField(null=True)
     stale_shares = models.IntegerField(null=True)
@@ -48,14 +48,13 @@ class Worker(models.Model):
     fun_speed = models.CharField(max_length=255, null=True)
     pools = models.CharField(max_length=255, null=True)
     claymore_version = models.CharField(max_length=255, null=True)
-    claymore_uptime =  models.BigIntegerField(null=True, default=0)
+    claymore_uptime = models.BigIntegerField(null=True, default=0)
 
     def __str__(self):
         if self.address_pool is None:
             return self.name + ": " + str(self.last_update)
         else:
             return self.address_pool.name + " - " + self.name + ": " + str(self.last_update)
-
 
     class Meta:
         unique_together = ['address_pool', 'name']
@@ -73,4 +72,3 @@ class WorkersHistory(models.Model):
             int(time.mktime(self.date_time.timetuple()) * 1000),
             float(self.reported_hash_rate)
         ]
-

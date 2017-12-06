@@ -1,41 +1,50 @@
 {% extends 'monitoring/base.html' %}
-{% load material_form %}
+{% load material_form core_tags %}
 
 {% block content %}
-        <table width="100%" class="striped centered">
+    <table width="100%" class="bordered centered">
         <colgroup>
+            <col width="10%">
             <col width="10%">
             <col width="20%">
             <col width="20%">
-            <col width="35%">
             <col width="15%">
         </colgroup>
-            <thead>
-            <tr>
-                <th>Type</th>
-                <th>Part</th>
-                <th>Serial</th>
-                <th>Comment</th>
-                <th>Last Update</th>
+        <thead>
+        <tr>
+            <th>Worker</th>
+            <th>Type</th>
+            <th>Part</th>
+            <th>Serial</th>
+            <th class="right">Last Update</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for part in parts %}
+            <tr {% if part.broken %}class="red lighten-5" {% endif %}>
+                <td>
+                    {% with part|get_worker as worker %}
+                        {% if worker %}
+                            <a href="{% url 'worker_details_info' pk=worker.pk %}">{{ worker.name }}</a>
+                        {% else %}
+                            ---
+                        {% endif %}
+                    {% endwith %}
+                </td>
+                <td>{% if part.broken %}
+                    <i class="material-icons red-text {% if part.comment %}tooltipped{% endif %}"
+                       style="font-size: 0.8em" data-position="right" data-delay="50"
+                       {% if part.comment %}data-tooltip="{{ part.comment }}"{% endif %}>build</i>
+                {% endif %}
+                    {{ part.type }}
+                </td>
+                <td>{{ part.part }}</td>
+                <td>{{ part.serial }}</td>
+                <td class="right">{{ part.last_update }}</td>
             </tr>
-            </thead>
-            <tbody>
-            {% for part in parts %}
-
-                <tr>
-                    <td>{% if part.broken %}
-                        <i class="material-icons red-text" style="font-size: 0.8em">build</i>
-                    {% endif %}
-                        {{ part.type }}
-                    </td>
-                    <td>{{ part.part }}</td>
-                    <td>{{ part.serial }}</td>
-                    <td>{{ part.comment }}</td>
-                    <td>{{ part.last_update }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% endfor %}
+        </tbody>
+    </table>
     <br><br><br><br><br>
     <!-- Modal Trigger -->
     <div class="fixed-action-btn">

@@ -1,0 +1,125 @@
+{% extends 'monitoring/base.html' %}
+{% load humanize core_tags %}
+{% block content %}
+    {% if worker %}
+        <table class="bordered highlight">
+            <tbody>
+            <tr>
+                <td>address_pool</td>
+                <td>{{ worker.address_pool }}</td>
+            </tr>
+            <tr>
+                <td>name</td>
+                <td>{{ worker.name }}</td>
+            </tr>
+            <tr>
+                <td>last_submit_time</td>
+                <td>{{ worker.last_submit_time }}</td>
+            </tr>
+            <tr>
+                <td>reported_hash_rate</td>
+                <td>{{ worker.reported_hash_rate }}</td>
+            </tr>
+            <tr>
+                <td>valid_shares</td>
+                <td>{{ worker.valid_shares }}</td>
+            </tr>
+            <tr>
+                <td>invalid_shares</td>
+                <td>{{ worker.invalid_shares }}</td>
+            </tr>
+            <tr>
+                <td>stale_shares</td>
+                <td>{{ worker.stale_shares }}</td>
+            </tr>
+            <tr>
+                <td>invalid_share_ratio</td>
+                <td>{{ worker.invalid_share_ratio }}</td>
+            </tr>
+            <tr>
+                <td>last_update</td>
+                <td>{{ worker.last_update }}</td>
+            </tr>
+            <tr>
+                <td>uptime</td>
+                <td>{{ worker.uptime }}</td>
+            </tr>
+            <tr>
+                <td>ip_address</td>
+                <td>{{ worker.ip_address }}</td>
+            </tr>
+            <tr>
+                <td>sum_hr_base</td>
+                <td>{{ worker.sum_hr_base }}</td>
+            </tr>
+            <tr>
+                <td>sum_hr_sec</td>
+                <td>{{ worker.sum_hr_sec }}</td>
+            </tr>
+            <tr>
+                <td>hr_details_base</td>
+                <td>{{ worker.hr_details_base }}</td>
+            </tr>
+            <tr>
+                <td>hr_details_sec</td>
+                <td>{{ worker.hr_details_sec }}</td>
+            </tr>
+            <tr>
+                <td>temperature</td>
+                <td>{{ worker.temperature }}</td>
+            </tr>
+            <tr>
+                <td>fun_speed</td>
+                <td>{{ worker.fun_speed }}</td>
+            </tr>
+            <tr>
+                <td>pools</td>
+                <td>{{ worker.pools }}</td>
+            </tr>
+            <tr>
+                <td>claymore_version</td>
+                <td>{{ worker.claymore_version }}</td>
+            </tr>
+            <tr>
+                <td>claymore_uptime</td>
+                <td>{{ worker.claymore_uptime }}</td>
+            </tr>
+            </tbody>
+        </table>
+        {% with worker|get_worker_parts as parts %}
+            <h3>Детальки в риге</h3>
+            <table>
+                <colgroup>
+                    <col width="10%">
+                    <col width="20%">
+                    <col width="20%">
+                    <col width="15%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Part</th>
+                    <th>Serial</th>
+                    <th class="right">Last Update</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for part in parts %}
+                    <tr {% if part.broken %}class="red lighten-5" {% endif %}>
+                        <td>{% if part.broken %}
+                            <i class="material-icons red-text {% if part.comment %}tooltipped{% endif %}"
+                               style="font-size: 0.8em" data-position="right" data-delay="50"
+                               {% if part.comment %}data-tooltip="{{ part.comment }}"{% endif %}>build</i>
+                        {% endif %}
+                            {{ part.type }}
+                        </td>
+                        <td>{{ part.part }}</td>
+                        <td>{{ part.serial }}</td>
+                        <td class="right">{{ part.last_update }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endwith %}
+    {% endif %}
+{% endblock %}

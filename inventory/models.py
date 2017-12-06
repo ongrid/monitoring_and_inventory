@@ -34,11 +34,11 @@ class Part(models.Model):
 
 class WorkerPart(models.Model):
     worker = models.ForeignKey(Worker)
-    part = models.ManyToManyField(Part, null=True, default=None, blank=True)
+    part = models.ManyToManyField(Part, default=None)
     last_update = models.DateTimeField(auto_now=True)
 
     def get_parts(self):
-        return "\n".join([str(p.type)+': '+ str(p.part) for p in self.part.all()])
+        return ", ".join([p.type.type + ': ' + p.part for p in self.part.all()])
 
     class Meta:
         verbose_name = 'Детали в ригах'
